@@ -2,6 +2,8 @@ const express =require('express');
 const mongoose=require('mongoose');
 const bodyParser=require('body-parser');
 const cors=require('cors');
+const dialogflow = require('@google-cloud/dialogflow');
+const uuid = require('uuid');
 require('dotenv').config();
 
 console.log('MongoDB URI:', process.env.MONGO_URI);
@@ -101,30 +103,50 @@ app.post('/signup', async (req, res) => {
 
 
 
-// Login Route
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+// Dialogflow setup
+const sessionClient = new dialogflow.SessionsClient({
+  keyFilename: process.env.DIALOGFLOW_KEYFILE, // path to the Dialogflow service account JSON
+});
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
-  }
+const projectId = process.env.DIALOGFLOW_PROJECT_ID; // Your Dialogflow project ID
+const sessionId = uuid.v4(); // Generate a unique session ID for each conversation
+
+const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
+
+// Send message to Dialogflow and receive response
+const sendToDialogflow = async (message) => {
+  const request = {
+    session: sessionPath,
+    queryInput: {
+      text: {
+        text: message,
+        languageCode: 'en-US',
+      },
+    },
+  };
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.json({ success: true, token });
+    const [response] = await sessionClient.detectIntent(request);
+    const result = response.queryResult;
+    return result.fulfillmentText; // Dialogflow's response message
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Dialogflow API Error:', error);
+    return 'Sorry, there was an issue processing your request.';
   }
+};
+
+// API Routes
+app.post('/chat', async (req, res) => {
+  const { message } = req.body; // Expect a message from the frontend
+
+  if (!message) {
+    return res.status(400).json({ message: 'Message is required' });
+  }
+
+  const dialogflowResponse = await sendToDialogflow(message);
+  res.json({ reply: dialogflowResponse });
 });
+
+
+
+
