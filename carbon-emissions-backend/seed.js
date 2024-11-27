@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const { Vehicle } = require('./server');  // Ensure the path to your server file is correct
+const { Vehicle } = require('./server');  
 
 const seedVehicles = async () => {
-  // List of vehicles to seed
+  
   const vehicles = [
     { type: 'Car', emissionFactor: 0.05 },
     { type: 'Truck', emissionFactor: 0.1 },
