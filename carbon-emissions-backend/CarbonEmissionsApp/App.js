@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
 export default function App() {
@@ -9,13 +10,12 @@ export default function App() {
 
   const calculateEmission = async () => {
     if (!vehicleType || !distance) {
-      Alert.alert('Error', 'Please provide both vehicle type and distance');
+      Alert.alert('Error', 'Please select a vehicle type and enter a distance');
       return;
     }
 
     try {
-
-      const response = await axios.post('http://localhost:3000/calculate', {
+      const response = await axios.post('http://192.168.0.220:3000/calculate', {
         vehicleType,
         distance: parseFloat(distance),
       });
@@ -32,12 +32,17 @@ export default function App() {
       <Text style={styles.title}>Carbon Emissions Calculator</Text>
 
       <Text style={styles.label}>Vehicle Type:</Text>
-      <TextInput
-        style={styles.input}
-        value={vehicleType}
-        onChangeText={setVehicleType}
-        placeholder="Enter vehicle type"
-      />
+      <Picker
+        selectedValue={vehicleType}
+        onValueChange={(itemValue) => setVehicleType(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Select vehicle type" value="" />
+        <Picker.Item label="Car" value="Car" />
+        <Picker.Item label="Bus" value="Bus" />
+        <Picker.Item label="Bike" value="Bike" />
+        <Picker.Item label="Truck" value="Truck" />
+      </Picker>
 
       <Text style={styles.label}>Distance (km):</Text>
       <TextInput
@@ -72,6 +77,14 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     marginTop: 10,
+  },
+  picker: {
+    width: '100%',
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 5,
   },
   input: {
     width: '100%',

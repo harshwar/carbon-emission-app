@@ -7,8 +7,9 @@ const seedVehicles = async () => {
   const vehicles = [
     { type: 'Car', emissionFactor: 0.05 },
     { type: 'Truck', emissionFactor: 0.1 },
-    { type: 'Motorcycle', emissionFactor: 0.02 },
-    { type: 'Bus', emissionFactor: 0.15 }
+    { type: 'Bike', emissionFactor: 0.02 },
+    { type: 'Bus', emissionFactor: 0.15 },
+    { type: 'Train', emissionFactor: 0.15 }
   ];
 
   try {
