@@ -62,10 +62,16 @@ export default function Home() {
         <Text style={styles.result}>Carbon Emission: {emission} kg CO₂</Text>
       )}
 
-      {/* Add a button to navigate to the Chat screen */}
+      {/* Button to navigate to the Chat screen */}
       <Button
         title="Go to Chat"
         onPress={() => navigation.navigate('Chat')} // Navigate to Chat screen
+      />
+
+      {/* Button to navigate to the News screen */}
+      <Button
+        title="Go to News"
+        onPress={() => navigation.navigate('News')} // Navigate to News screen
       />
     </View>
   );
