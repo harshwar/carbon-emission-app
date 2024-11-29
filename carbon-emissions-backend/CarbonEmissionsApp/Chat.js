@@ -16,7 +16,7 @@ export default function Chat() {
     setUserMessage('');
 
     try {
-      const response = await fetch('http://192.168.0.220:3000/chat', {  // Replace with your server URL
+      const response = await fetch('http://192.168.0.221:3000/chat', {  // Replace with your server URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

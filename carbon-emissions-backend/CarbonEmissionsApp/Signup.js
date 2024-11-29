@@ -10,7 +10,7 @@ export default function SignUp({ navigation }) {
   const handleSignUp = async () => {
     try {
       // Send sign-up request to the backend server
-      const response = await fetch('http://192.168.0.220:3000/signup', {
+      const response = await fetch('http://192.168.0.221:3000/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

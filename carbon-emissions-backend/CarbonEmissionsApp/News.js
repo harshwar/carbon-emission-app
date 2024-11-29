@@ -10,7 +10,7 @@ const News = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-       const response = await fetch(`http://192.168.0.220:3000/news`);  // Use API key in the fetch request
+       const response = await fetch(`http://192.168.0.221:3000/news`);  // Use API key in the fetch request
          if (!response.ok) {
           throw new Error('Failed to fetch news');
         }

@@ -18,7 +18,7 @@ export default function Home() {
     }
 
     try {
-      const response = await axios.post('http://192.168.0.220:3000/calculate', {
+      const response = await axios.post('http://192.168.0.221:3000/calculate', {
         vehicleType,
         distance: parseFloat(distance),
       });

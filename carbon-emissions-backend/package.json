@@ -24,5 +24,8 @@
     "mongoose": "^8.8.3",
     "react-native-dotenv": "^3.4.11",
     "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.25.9"
   }
 }
