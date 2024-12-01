@@ -11,13 +11,8 @@ const News = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-<<<<<<< Updated upstream
-       const response = await fetch(`http://192.168.0.220:3000/news`);  // Use API key in the fetch request
-         if (!response.ok) {
-=======
         const response = await fetch(`http://192.168.0.104:3000/news`);
         if (!response.ok) {
->>>>>>> Stashed changes
           throw new Error('Failed to fetch news');
         }
         const data = await response.json();
