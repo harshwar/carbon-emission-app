@@ -10,11 +10,7 @@ export default function SignUp({ navigation }) {
   const handleSignUp = async () => {
     try {
       // Send sign-up request to the backend server
-<<<<<<< Updated upstream
-      const response = await fetch('http://192.168.0.220:3000/signup', {
-=======
       const response = await fetch('http://192.168.0.104:3000/signup', {
->>>>>>> Stashed changes
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
