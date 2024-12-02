@@ -6,6 +6,7 @@ import Login from './Login';   // Import the Login screen
 import Home from './Home';     // Import the Home screen (main page with carbon calculator)
 import Chat from './Chat';
 import News from './News';     // Import the News screen
+import Quiz from './Quiz';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ export default function Navigation() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignUp">
         <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Quiz" component={Quiz} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Chat" component={Chat} />

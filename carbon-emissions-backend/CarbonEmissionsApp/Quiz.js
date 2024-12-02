@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, Picker, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Quiz() {
     const [answers, setAnswers] = useState({
@@ -13,7 +16,16 @@ export default function Quiz() {
 
     const navigation = useNavigation();
 
-    // Handle changes in the inputs
+    const getToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('authToken');
+            return token;
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+            return null;
+        }
+    };
+
     const handleInputChange = (name, value) => {
         setAnswers(prevAnswers => ({
             ...prevAnswers,
@@ -21,8 +33,46 @@ export default function Quiz() {
         }));
     };
 
-    const handleSubmit = () => {
-        navigation.navigate('Suggestions', { answers });
+    const handleSubmit = async () => {
+        const token = await getToken();
+        if (!token) {
+            alert('You need to log in first');
+            return;
+        }
+
+        // Validation to check if all answers are filled
+        if (Object.values(answers).includes('')) {
+            alert('Please fill all the fields before submitting');
+            return;
+        }
+
+        const requestBody = { answers };
+
+        try {
+            const response = await fetch('http://192.168.0.220:3000/saveQuiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            const text = await response.text();
+            if (response.ok) {
+                const data = JSON.parse(text);
+                if (data.success) {
+                    navigation.navigate('Suggestions', { answers });
+                } else {
+                    alert('Error saving quiz data');
+                }
+            } else {
+                alert('Error saving quiz data');
+            }
+        } catch (error) {
+            console.error('Error with fetch request:', error);
+            alert('Network error or request failed');
+        }
     };
 
     return (
